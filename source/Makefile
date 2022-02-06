@@ -56,10 +56,8 @@ $(ZITA-RESAMPLER_MIN): $(ZITA-RESAMPLER_O)
 
 $(ZITA-RESAMPLER_O):	$(ZITA-RESAMPLER_H)
 
-ifeq ($(UNAME_S),Darwin)
 libzita-resampler.a: $(ZITA-RESAMPLER_O)
 	ar rcs $@ $^
-endif
 
 install:	$(ZITA-RESAMPLER_MIN)
 	install -d $(DESTDIR)$(INCDIR)/zita-resampler
