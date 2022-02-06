@@ -30,10 +30,14 @@ MINVERS = 8.0
 VERSION = $(MAJVERS).$(MINVERS)
 DISTDIR = zita-resampler-$(VERSION)
 
+UNAME_S := $(shell uname -s)
+
 CPPFLAGS += -I. -D_REENTRANT -D_POSIX_PTHREAD_SEMANTICS
-CPPFLAGS += -DENABLE_SSE2
 CXXFLAGS += -Wall -fPIC -O2 -ffast-math
+ifeq ($(UNAME_S),Linux)
 CXXFLAGS += -march=native
+CPPFLAGS += -DENABLE_SSE2
+endif
 LDFLAGS += 
 LDLIBS +=
 
@@ -52,6 +56,10 @@ $(ZITA-RESAMPLER_MIN): $(ZITA-RESAMPLER_O)
 
 $(ZITA-RESAMPLER_O):	$(ZITA-RESAMPLER_H)
 
+ifeq ($(UNAME_S),Darwin)
+libzita-resampler.a: $(ZITA-RESAMPLER_O)
+	ar rcs $@ $^
+endif
 
 install:	$(ZITA-RESAMPLER_MIN)
 	install -d $(DESTDIR)$(INCDIR)/zita-resampler
