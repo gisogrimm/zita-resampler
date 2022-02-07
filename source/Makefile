@@ -36,7 +36,9 @@ CPPFLAGS += -I. -D_REENTRANT -D_POSIX_PTHREAD_SEMANTICS
 CXXFLAGS += -Wall -fPIC -O2 -ffast-math
 ifeq ($(UNAME_S),Linux)
 CXXFLAGS += -march=native
+ifeq ($(shell uname -s),x86_64)
 CPPFLAGS += -DENABLE_SSE2
+endif
 endif
 LDFLAGS += 
 LDLIBS +=
