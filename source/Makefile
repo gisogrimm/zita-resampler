@@ -30,11 +30,21 @@ MINVERS = 11.2
 VERSION = $(MAJVERS).$(MINVERS)
 DISTDIR = zita-resampler-$(VERSION)
 
+UNAME_S := $(shell uname -s)
+
 CPPFLAGS += -I. -D_REENTRANT -D_POSIX_PTHREAD_SEMANTICS
-CPPFLAGS += -DENABLE_SSE2
+#CPPFLAGS += -DENABLE_SSE2
 #CPPFLAGS += -DENABLE_NEON  
 CXXFLAGS += -Wall -fPIC -O2 -ffast-math
+ifeq ($(UNAME_S),Linux)
 CXXFLAGS += -march=native
+ifeq ($(shell uname -m),x86_64)
+CPPFLAGS += -DENABLE_SSE2
+endif
+ifeq ($(shell uname -m),armv7l)
+CPPFLAGS += -DENABLE_NEON
+endif
+endif
 LDFLAGS += 
 LDLIBS +=
 
