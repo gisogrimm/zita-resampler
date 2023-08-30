@@ -1,6 +1,6 @@
 // ----------------------------------------------------------------------------
 //
-//  Copyright (C) 2006-2020 Fons Adriaensen <fons@linuxaudio.org>
+//  Copyright (C) 2006-2023 Fons Adriaensen <fons@linuxaudio.org>
 //    
 //  This program is free software; you can redistribute it and/or modify
 //  it under the terms of the GNU General Public License as published by
@@ -27,6 +27,8 @@
 
 #undef ENABLE_VEC4
 #if defined(ENABLE_SSE2)
+#  define ENABLE_VEC4
+#elif defined(ENABLE_NEON)
 #  define ENABLE_VEC4
 #endif
 

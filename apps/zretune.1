@@ -6,15 +6,19 @@ zretune \- resample an audio file in order to change its pitch
 [options] input-file output-file
 .SH DESCRIPTION
 .B zretune
-resamples an audio file by a the inverse of a ratio expressed in cents,
-without changing the nominal sample rate. The result is to change the
-musical pitch and lenght of the file. Input can be any audio file
-readable by the libsndfile library. The output file type is either
-WAV, WAVEX, CAF, AIFF or FLAC.
+resamples an audio file by a the inverse of a ratio given directly
+or expressed in cents, without changing the nominal sample rate.
+The result is to change the musical pitch and length of the file.
+Input can be any audio file readable by the libsndfile library.
+The output file type is either WAV, WAVEX, CAF, AIFF or FLAC.
 .SH OPTIONS
 .TP
 .B --help
 Display a short help text.
+.TP
+.B --ratio pitch ratio
+The accepted range is 0.5 to 2.0. The useful range in practice
+will be smaller.
 .TP
 .B --cent pitch change in cents
 The number of cents by which the pitch is changed. The accepted

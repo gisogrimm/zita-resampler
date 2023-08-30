@@ -261,7 +261,7 @@ input samples at the start and end of the resampling process. The API makes it
 easy to add such padding, and doing this is left entirely up to the user.
 </p>
 <p>
-The <b>inpsize ()</b> member returns the lenght of the FIR filter expressed in
+The <b>inpsize ()</b> member returns the length of the FIR filter expressed in
 input samples. At least this number of samples is required to produce an output
 sample. If <b>k</b> is the value returned by this function, then
 </p>
@@ -368,7 +368,7 @@ can be used. The destructor calls <a href="#clear"><b>clear ()</b></a>.
 <br><p class="apihdr">int &nbsp Resampler::setup (unsigned int &nbsp fs_inp, unsigned int fs_out, unsigned int nchan, unsigned int hlen);</p>
 <p>
 <b>Description:</b> Configures the object for a combination of input / output sample rates, number
-of channels, and filter lenght.<br>If the parameters are OK, creates the filter coefficient tables
+of channels, and filter length.<br>If the parameters are OK, creates the filter coefficient tables
 or re-uses existing ones, allocates some internal resources, and returns via <a href="#reset">
 <b>reset ()</b></a>.
 <br><br>
@@ -381,7 +381,7 @@ with <b>a, b</b> integer and <b>b &le; 1000</b>.
 <br><br>
 <b>nchan:</b> Number of channels, must not be zero.
 <br><br>
-<b>hlen:</b> Half the lenght of the filter expressed in samples at the lower of
+<b>hlen:</b> Half the length of the filter expressed in samples at the lower of
 input and output rates. This parameter determines the 'quality' as explained
 <a href="#algorithm">here</a>. For any fixed combination of the other parameters,
 cpu load will be roughly proportional to <b>hlen</b>. The valid range is
@@ -402,7 +402,7 @@ even if they are not shared.
 <br><p class="apihdr">int &nbsp VResampler::setup (double ratio, unsigned int nchan, unsigned int hlen);</p>
 <p>
 <b>Description:</b> Configures the object for a combination of resampling ratio, number of channels,
-and filter lenght.<br>If the parameters are OK, creates the filter coefficient tables or re-uses
+and filter length.<br>If the parameters are OK, creates the filter coefficient tables or re-uses
 existing ones, allocates some internal resources, and returns via <a href="#reset">
 <b>reset ()</b></a>.
 <br><br>
@@ -413,7 +413,7 @@ existing ones, allocates some internal resources, and returns via <a href="#rese
 <br><br>
 <b>nchan:</b> Number of channels, must not be zero.
 <br><br>
-<b>hlen:</b> Half the lenght of the filter expressed in samples at the lower of
+<b>hlen:</b> Half the length of the filter expressed in samples at the lower of
 the input and output rates. This parameter determines the 'quality' as explained
 <a href="#algorithm">here</a>. For any fixed combination of the other parameters,
 cpu load will be roughly proportional to <b>hlen</b>. The valid range is
@@ -482,7 +482,7 @@ this number of channels in interleaved format.
 <p>
 <b>Description:</b> Accessor.
 <br><br>
-<b>Returns:</b> If the resampler is configured, the lenght of the
+<b>Returns:</b> If the resampler is configured, the length of the
 finite impulse filter expressed in samples at the input sample rate,
 or zero otherwise. This value may be used to determine the number of
 silence samples to insert at the start and end when resampling e.g.

@@ -1,6 +1,6 @@
 # ----------------------------------------------------------------------------
 #
-#  Copyright (C) 2006-2018 Fons Adriaensen <fons@linuxaudio.org>
+#  Copyright (C) 2006-2022 Fons Adriaensen <fons@linuxaudio.org>
 #    
 #  This program is free software; you can redistribute it and/or modify
 #  it under the terms of the GNU General Public License as published by
@@ -22,7 +22,7 @@ PREFIX ?= /usr/local
 BINDIR ?= $(PREFIX)/bin
 MANDIR ?= /usr/share/man/man1
 
-VERSION = 1.6.0
+VERSION = 1.10.1
 CPPFLAGS += -MMD -MP -DVERSION=\"$(VERSION)\"
 CXXFLAGS += -O2  -ffast-math -Wall
 CXXFLAGS += -march=native
@@ -55,8 +55,8 @@ zretune.1.gz:	zretune.1
 
 
 install:	all
-	install -d $(BINDIR)
-	install -d $(MANDIR)
+	install -d $(DESTDIR)$(BINDIR)
+	install -d $(DESTDIR)$(MANDIR)
 	install -m 755 zresample $(DESTDIR)$(BINDIR)
 	install -m 755 zretune $(DESTDIR)$(BINDIR)
 	install -m 644 zresample.1.gz $(DESTDIR)$(MANDIR)
@@ -65,8 +65,8 @@ install:	all
 uninstall: 
 	/bin/rm -f $(DESTDIR)$(BINDIR)/zresample
 	/bin/rm -f $(DESTDIR)$(BINDIR)/zretune
-	/bin/rm -f $(MANDIR)/zresample.1.gz
-	/bin/rm -f $(MANDIR)/zretune.1.gz
+	/bin/rm -f $(DESTDIR)$(MANDIR)/zresample.1.gz
+	/bin/rm -f $(DESTDIR)$(MANDIR)/zretune.1.gz
 
 clean:
 	/bin/rm -f *~ *.o *.a *.d *.so *.gz zresample zretune

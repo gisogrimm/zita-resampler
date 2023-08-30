@@ -1,6 +1,6 @@
 // ----------------------------------------------------------------------------
 //
-//  Copyright (C) 2006-2020 Fons Adriaensen <fons@linuxaudio.org>
+//  Copyright (C) 2006-2023 Fons Adriaensen <fons@linuxaudio.org>
 //    
 //  This program is free software; you can redistribute it and/or modify
 //  it under the terms of the GNU General Public License as published by
@@ -25,8 +25,8 @@
 #include <pthread.h>
 
 
-#define ZITA_RESAMPLER_MAJOR_VERSION 1
-#define ZITA_RESAMPLER_MINOR_VERSION 8
+#define ZITA_RESAMPLER_MAJOR_VERSION  1
+#define ZITA_RESAMPLER_MINOR_VERSION  11
 
 
 extern int zita_resampler_major_version (void);

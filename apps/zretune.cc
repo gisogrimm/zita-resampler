@@ -1,6 +1,6 @@
 // ----------------------------------------------------------------------------
 //
-//  Copyright (C) 2006-2011 Fons Adriaensen <fons@linuxaudio.org>
+//  Copyright (C) 2006-2023 Fons Adriaensen <fons@linuxaudio.org>
 //    
 //  This program is free software; you can redistribute it and/or modify
 //  it under the terms of the GNU General Public License as published by
@@ -27,13 +27,13 @@
 #include "audiofile.h"
 
 
-enum { HELP, CAF, WAV, AMB, AIFF, FLAC, BIT16, BIT24, FLOAT, CENT, REC, TRI, LIPS, PAD };
+enum { HELP, CAF, WAV, AMB, AIFF, FLAC, BIT16, BIT24, FLOAT, RATIO, CENT, REC, TRI, LIPS, PAD };
 enum { BUFFSIZE = 0x4000, FILTSIZE = 96 };
 
 
 static unsigned int type = Audiofile::TYPE_WAV;
 static unsigned int form = Audiofile::FORM_24BIT;
-static double       cent = 0;
+static double       ratio = 1.0;
 static unsigned int dith = Audiofile::DITHER_NONE;
 static bool         zpad = false;
 
@@ -41,11 +41,12 @@ static bool         zpad = false;
 static void help (void)
 {
     fprintf (stderr, "\nzretune %s\n", VERSION);
-    fprintf (stderr, "(C) 2007-2012 Fons Adriaensen  <fons@linuxaudio.org>\n");
+    fprintf (stderr, "(C) 2007-2023 Fons Adriaensen  <fons@linuxaudio.org>\n");
     fprintf (stderr, "Usage: zretune <options> <input file> <output file>.\n");
     fprintf (stderr, "Options:\n");
     fprintf (stderr, "  Display this text:     --help\n");
     fprintf (stderr, "  Output file type:      --caf, --wav, --amb, --aiff, --flac\n");
+    fprintf (stderr, "  Resampling ratio:      --ratio <pitch ratio>\n");
     fprintf (stderr, "  Resampling ratio:      --cent <pitch change>\n");
     fprintf (stderr, "  Output sample format:  --16bit, --24bit, --float\n");
     fprintf (stderr, "  Dither type (16 bit):  --rec, --tri, --lips\n");
@@ -67,6 +68,7 @@ static struct option options [] =
     { "16bit", 0, 0, BIT16 },
     { "24bit", 0, 0, BIT24 },
     { "float", 0, 0, FLOAT },
+    { "ratio", 1, 0, RATIO },
     { "cent",  1, 0, CENT  },
     { "rec",   0, 0, REC   },
     { "tri",   0, 0, TRI   },
@@ -78,8 +80,9 @@ static struct option options [] =
 
 static void procoptions (int ac, char *av [])
 {
-    int k;
-
+    int     k;
+    double  c;
+    
     while ((k = getopt_long (ac, av, "", options, 0)) != -1)
     {
 	switch (k)
@@ -112,12 +115,20 @@ static void procoptions (int ac, char *av [])
 	case FLOAT:
 	    form = Audiofile::FORM_FLOAT;
 	    break;
-	case CENT:
-	    if (sscanf (optarg, "%lf", &cent) != 1)
+	case RATIO:
+	    if ((sscanf (optarg, "%lf", &ratio) != 1) || (ratio < 0.5) || (ratio > 2.0))
 	    {
-		fprintf (stderr, "Illegal value for --rate option: '%s'.\n", optarg);
+		fprintf (stderr, "Illegal value for --ratio option: '%s'.\n", optarg);
 		exit (1);
 	    }
+	    break;
+	case CENT:
+	    if ((sscanf (optarg, "%lf", &c) != 1) || (abs (c) > 1200))
+	    {
+		fprintf (stderr, "Illegal value for --cent option: '%s'.\n", optarg);
+		exit (1);
+	    }
+            ratio = pow (2.0, c / 1200);
 	    break;
 	case REC:
 	    dith = Audiofile::DITHER_RECT;
@@ -144,7 +155,6 @@ int main (int ac, char *av [])
     unsigned int  k, chan, z1, z2;
     float         *inpb, *outb;
     bool          done;
-    double        ratio;
 
     procoptions (ac, av);
     if (ac - optind < 2)
@@ -164,14 +174,7 @@ int main (int ac, char *av [])
 	return 1;
     }
 
-    if ((cent < -1200) || (cent > 1200))
-    {
-        fprintf (stderr, "Pitch change %3.1lf is out of range.\n", cent);
-        Ainp.close ();
-        return 1;
-    }
-    ratio = pow (2.0, -cent / 1200.0);
-    R.setup (ratio, Ainp.chan (), FILTSIZE);
+    R.setup (1.0 / ratio, Ainp.chan (), FILTSIZE);
 
     optind++;
     if (Aout.open_write (av [optind], type, form, Ainp.rate(), Ainp.chan ()))
@@ -198,7 +201,7 @@ int main (int ac, char *av [])
 
     chan = Ainp.chan ();
     inpb = new float [chan * BUFFSIZE];
-    if (cent != 0.0)
+    if (ratio != 1.0)
     {
         outb = new float [chan * BUFFSIZE];
 	// Insert zero samples at start.

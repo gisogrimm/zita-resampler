@@ -1,6 +1,6 @@
 # ----------------------------------------------------------------------------
 #
-#  Copyright (C) 2006-2020 Fons Adriaensen <fons@linuxaudio.org>
+#  Copyright (C) 2006-2023 Fons Adriaensen <fons@linuxaudio.org>
 #    
 #  This program is free software; you can redistribute it and/or modify
 #  it under the terms of the GNU General Public License as published by
@@ -26,20 +26,15 @@ INCDIR ?= $(PREFIX)/include
 LIBDIR ?= $(PREFIX)/lib$(SUFFIX)
 
 MAJVERS = 1
-MINVERS = 8.0
+MINVERS = 11.2
 VERSION = $(MAJVERS).$(MINVERS)
 DISTDIR = zita-resampler-$(VERSION)
 
-UNAME_S := $(shell uname -s)
-
 CPPFLAGS += -I. -D_REENTRANT -D_POSIX_PTHREAD_SEMANTICS
-CXXFLAGS += -Wall -fPIC -O2 -ffast-math
-ifeq ($(UNAME_S),Linux)
-CXXFLAGS += -march=native
-ifeq ($(shell uname -s),x86_64)
 CPPFLAGS += -DENABLE_SSE2
-endif
-endif
+#CPPFLAGS += -DENABLE_NEON  
+CXXFLAGS += -Wall -fPIC -O2 -ffast-math
+CXXFLAGS += -march=native
 LDFLAGS += 
 LDLIBS +=
 
@@ -58,16 +53,14 @@ $(ZITA-RESAMPLER_MIN): $(ZITA-RESAMPLER_O)
 
 $(ZITA-RESAMPLER_O):	$(ZITA-RESAMPLER_H)
 
-libzita-resampler.a: $(ZITA-RESAMPLER_O)
-	ar rcs $@ $^
 
 install:	$(ZITA-RESAMPLER_MIN)
 	install -d $(DESTDIR)$(INCDIR)/zita-resampler
 	install -d $(DESTDIR)$(LIBDIR)
 	install -m 644 $(ZITA-RESAMPLER_H)   $(DESTDIR)$(INCDIR)/zita-resampler
 	install -m 755 $(ZITA-RESAMPLER_MIN) $(DESTDIR)$(LIBDIR)
-	ldconfig
 	ln -sf $(ZITA-RESAMPLER_MIN) $(DESTDIR)$(LIBDIR)/$(ZITA-RESAMPLER_SO)
+	ln -sf $(ZITA-RESAMPLER_MIN) $(DESTDIR)$(LIBDIR)/$(ZITA-RESAMPLER_MAJ)
 
 uninstall:
 	/bin/rm -rf $(DESTDIR)$(INCDIR)/zita-resampler

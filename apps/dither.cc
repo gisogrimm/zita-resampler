@@ -49,7 +49,7 @@ void Dither::reset (void)
 void Dither::proc_rectangular (int nsam, const float *srce, int16_t *dest, int ds, int dd)
 {
     float   v, r;
-    int16_t k;
+    int32_t k;
 
     while (nsam--)
     {
@@ -58,7 +58,7 @@ void Dither::proc_rectangular (int nsam, const float *srce, int16_t *dest, int d
 	k = lrintf (v);
 	if      (k < -LIMIT) k = -LIMIT;
 	else if (k >  LIMIT) k =  LIMIT;
-        *dest = k;
+        *dest = k & 0xFFFF;
         srce += ds;
         dest += dd;
     }
@@ -68,7 +68,7 @@ void Dither::proc_rectangular (int nsam, const float *srce, int16_t *dest, int d
 void Dither::proc_triangular (int nsam, const float *srce, int16_t *dest, int ds, int dd)
 {
     float   v, r0, r1;
-    int16_t k;
+    int32_t k;
 
     r1 = *_err;
     while (nsam--)
@@ -79,7 +79,7 @@ void Dither::proc_triangular (int nsam, const float *srce, int16_t *dest, int ds
 	k = lrintf (v);
 	if      (k < -LIMIT) k = -LIMIT;
 	else if (k >  LIMIT) k =  LIMIT;
-        *dest = k;
+        *dest = k & 0xFFFF;
         srce += ds;
         dest += dd;
     }
@@ -91,7 +91,7 @@ void Dither::proc_lipschitz (int nsam, const float *srce, int16_t *dest, int ds,
 {
     float   e, u, v, *p;
     int     i;
-    int16_t k;
+    int32_t k;
 
     i = _ind;
     while (nsam--)
@@ -108,7 +108,7 @@ void Dither::proc_lipschitz (int nsam, const float *srce, int16_t *dest, int ds,
 	e = k - u;
 	if      (k < -LIMIT) k = -LIMIT;
 	else if (k >  LIMIT) k =  LIMIT;
-        *dest = k;
+        *dest = k & 0xFFFF;
 	if (--i < 0)
 	{
 	    _err [SIZE + 0] = _err [0];

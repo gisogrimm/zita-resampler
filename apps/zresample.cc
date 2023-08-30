@@ -1,6 +1,6 @@
 // ----------------------------------------------------------------------------
 //
-//  Copyright (C) 2006-2011 Fons Adriaensen <fons@linuxaudio.org>
+//  Copyright (C) 2006-2023 Fons Adriaensen <fons@linuxaudio.org>
 //    
 //  This program is free software; you can redistribute it and/or modify
 //  it under the terms of the GNU General Public License as published by
@@ -42,7 +42,7 @@ static bool         zpad = false;
 static void help (void)
 {
     fprintf (stderr, "\nzresample %s\n", VERSION);
-    fprintf (stderr, "(C) 2007-2015 Fons Adriaensen  <fons@linuxaudio.org>\n");
+    fprintf (stderr, "(C) 2007-2023 Fons Adriaensen  <fons@linuxaudio.org>\n");
     fprintf (stderr, "Usage: zresample <options> <input file> <output file>.\n");
     fprintf (stderr, "Options:\n");
     fprintf (stderr, "  Display this text:     --help\n");
@@ -252,7 +252,10 @@ int main (int ac, char *av [])
 	        {
 		    if (fabsf (gain - 1.0f) > 1e-3f)
 		    {
-		        for (i = 0; i < k; i++) inpb [i] *= gain;
+                        for (i = 0; i < k * chan; i++)
+                        {
+                            inpb [i] *= gain;
+                        }
 		    }
 		    // Process next 'k' input samples.
                     R.inp_count = k;
@@ -286,7 +289,10 @@ int main (int ac, char *av [])
 	    {
   	        if (fabsf (gain - 1.0f) > 1e-3f)
 		{
-		    for (i = 0; i < k; i++) inpb [i] *= gain;
+		    for (i = 0; i < k * chan; i++)
+                    {
+                        inpb [i] *= gain;
+                    }
 		}
 		Aout.write (inpb, k);
 	    }
