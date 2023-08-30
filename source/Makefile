@@ -42,7 +42,7 @@ ifeq ($(shell uname -m),x86_64)
 CPPFLAGS += -DENABLE_SSE2
 endif
 ifeq ($(shell uname -m),armv7l)
-CPPFLAGS += -DENABLE_NEON
+#CPPFLAGS += -DENABLE_NEON
 endif
 endif
 LDFLAGS += 
