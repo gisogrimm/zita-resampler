@@ -35,7 +35,7 @@ UNAME_S := $(shell uname -s)
 CPPFLAGS += -I. -D_REENTRANT -D_POSIX_PTHREAD_SEMANTICS
 #CPPFLAGS += -DENABLE_SSE2
 #CPPFLAGS += -DENABLE_NEON  
-CXXFLAGS += -Wall -fPIC -O2 -ffast-math
+CXXFLAGS += -Wall -fPIC -O2 -ffast-math -ggdb
 ifeq ($(UNAME_S),Linux)
 CXXFLAGS += -march=native
 ifeq ($(shell uname -m),x86_64)
