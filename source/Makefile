@@ -39,7 +39,8 @@ CXXFLAGS += -Wall -fPIC -O2 -ffast-math -ggdb
 ifeq ($(UNAME_S),Linux)
 CXXFLAGS += -march=native
 ifeq ($(shell uname -m),x86_64)
-CPPFLAGS += -DENABLE_SSE2
+# disable SSE2, because it results in illegal instructions when compiled on CI pipeline:
+#CPPFLAGS += -DENABLE_SSE2
 endif
 ifeq ($(shell uname -m),armv7l)
 #CPPFLAGS += -DENABLE_NEON
