@@ -86,8 +86,7 @@ int VResampler::setup (double       ratio,
         mi = (unsigned int)(ceil (mi / ratio));
     }
 #ifdef ENABLE_VEC4
-            hl = (hl + 3) & ~3;
-            fprintf(stderr,"%s:%d vec4: hl=%d\n",__FILE__,__LINE__,hl);
+    hl = (hl + 3) & ~3;
 #endif
     T = Resampler_table::create (frel, hl, NPHASE);
     clear ();

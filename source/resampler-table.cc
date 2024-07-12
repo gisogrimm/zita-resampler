@@ -80,15 +80,12 @@ Resampler_table::Resampler_table (double fr, unsigned int hl, unsigned int np) :
 
     n = hl * (np + 1);
 #ifdef ENABLE_VEC4
-    fprintf(stderr,"%s:%d vec4\n",__FILE__,__LINE__);
     int err = posix_memalign ((void **) &_ctab, 16, n * sizeof (float));
     if( err != 0 )
       fprintf(stderr,"posix_memalign failed with error %d\n",err);
 #else    
-    fprintf(stderr,"%s:%d no vec4\n",__FILE__,__LINE__);
     _ctab = new float [n];
 #endif
-    fprintf(stderr,"%s:%d endvec4\n",__FILE__,__LINE__);
     p = _ctab;
     for (j = 0; j <= np; j++)
     {
