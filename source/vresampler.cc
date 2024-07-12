@@ -87,6 +87,7 @@ int VResampler::setup (double       ratio,
     }
 #ifdef ENABLE_VEC4
             hl = (hl + 3) & ~3;
+            fprintf(stderr,"%s:%d vec4: hl=%d\n",__FILE__,__LINE__,hl);
 #endif
     T = Resampler_table::create (frel, hl, NPHASE);
     clear ();
@@ -95,9 +96,16 @@ int VResampler::setup (double       ratio,
         _table = T;
         n = nchan * (2 * hl + mi);
 #ifdef ENABLE_VEC4
-        posix_memalign ((void **)(&_buff), 16, n * sizeof (float));
-        posix_memalign ((void **)(&_c1), 16, hl * sizeof (float));
-        posix_memalign ((void **)(&_c2), 16, hl * sizeof (float));
+        int err = 0;
+        err = posix_memalign ((void **)(&_buff), 16, n * sizeof (float));
+         if( err != 0 )
+           fprintf(stderr,"posix_memalign failed with error %d\n",err);
+         err = posix_memalign ((void **)(&_c1), 16, hl * sizeof (float));
+         if( err != 0 )
+           fprintf(stderr,"posix_memalign failed with error %d\n",err);
+        err = posix_memalign ((void **)(&_c2), 16, hl * sizeof (float));
+        if( err != 0 )
+          fprintf(stderr,"posix_memalign failed with error %d\n",err);
 #else   
         _buff  = new float [n];
         _c1 = new float [hl];

@@ -127,7 +127,9 @@ int Resampler::setup (unsigned int fs_inp,
         _table = T;
          n = nchan * (2 * hl + mi);
 #ifdef ENABLE_VEC4
-        posix_memalign ((void **)(&_buff), 16, n * sizeof (float));
+         int err = posix_memalign ((void **)(&_buff), 16, n * sizeof (float));
+         if( err != 0 )
+           fprintf(stderr,"posix_memalign failed with error %d\n",err);
         memset (_buff, 0, n * sizeof (float));
 #else       
         _buff = new float [n];
